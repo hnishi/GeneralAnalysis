@@ -1,7 +1,7 @@
 #!/bin/bash -eu
 
 NAME="do_histo.bash";
-VERSION=1.0;
+VERSION=1.2;
 
 echo Program: $NAME  
 echo Version: $VERSION  
@@ -49,10 +49,12 @@ EOF
 # End of AWK Scripts           #
 ################################
 
-for i in $(ls out_do3*);do 
+string1="p "
+
+for i in $(ls out_do2*);do 
 echo $i
 inputfile=$i #major_major_angle_400ns.dat  
-outfile="histo_"$i #histo.dat  
+outfile="out_do4_"$i #histo.dat  
 
 awk -v v_min_x="${min_x}" \
     -v v_width_win="${width_win}" \
@@ -62,4 +64,10 @@ awk -v v_min_x="${min_x}" \
     -v v_column="${column}" \
 "$scriptVariable" ${inputfile}
 
+string1=$string1" \""${outfile}"\" w l, " 
+
 done
+
+echo $string1 | sed -e 's/,$//g' 
+echo $string1 | sed -e 's/,$//g' > plot_out_do4.gp
+echo pause -1 >> plot_out_do4.gp
